@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>wasm-bindgen-file-reader playground</title>
+    <style>
+      body {
+        background-color: #eee;
+      }
+      input {
+        font-family: monospace;
+      }
+      textarea {
+        font-family: monospace;
+      }
+    </style>
+  </head>
+  <body>
+    <a href="https://github.com/Badel2/wasm-bindgen-file-reader"
+      >WASM BINDGEN FILE READER</a
+    >
+
+    <br />
+
+    Load a huge file and calculate its sha256 hash in WebAssembly
+
+    <br />
+
+    <input type="file" id="filepicker" />
+
+    <br />
+
+    <button id="comphdl_start" onClick="runGui()">RUN!</button>
+
+    <br />
+
+    <textarea
+      id="output_textarea"
+      class="code"
+      rows="5"
+      cols="100"
+      readonly
+    ></textarea>
+
+    <script type="text/javascript" src="wasm_bindgen_file_reader.js"></script>
+    <script>
+      let file = null;
+      document.getElementById("filepicker").addEventListener(
+        "change",
+        function() {
+          file = this.files[0];
+        },
+        false
+      );
+
+      function runGui() {
+        Rust.wasm_bindgen_file_reader.then(
+          function(wasm_bindgen_file_reader) {
+            let outta = document.getElementById("output_textarea");
+            let myWorker = new Worker("worker.js");
+            myWorker.postMessage({ file: file });
+            myWorker.onmessage = function(e) {
+              console.log("Got message from worker: ", e.data);
+              outta.value = e.data;
+            };
+          },
+          function(err) {
+            console.error(err);
+          }
+        );
+      }
+    </script>
+  </body>
+</html>
