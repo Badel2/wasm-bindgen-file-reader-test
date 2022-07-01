@@ -9,7 +9,9 @@ onmessage = async function(e) {
         e.data.offset,
     );
     */
-  let workerResult = wasm_bindgen_file_reader_test.sha256_file_sync(e.data.file);
+  let workerResult = wasm_bindgen_file_reader_test.sha256_file_sync(
+    e.data.file
+  );
   console.log("Posting message back to main script");
   postMessage(workerResult);
 };

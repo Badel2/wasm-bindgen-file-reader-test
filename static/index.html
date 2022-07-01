@@ -42,7 +42,6 @@
       readonly
     ></textarea>
 
-    <script type="text/javascript" src="wasm_bindgen_file_reader_test.js"></script>
     <script>
       let file = document.getElementById("filepicker").files[0] || null;
       document.getElementById("filepicker").addEventListener(
@@ -55,19 +54,12 @@
       let myWorker = new Worker("worker.js");
 
       function runGui() {
-        Rust.wasm_bindgen_file_reader_test.then(
-          function(wasm_bindgen_file_reader_test) {
-            let outta = document.getElementById("output_textarea");
-            myWorker.postMessage({ file: file });
-            myWorker.onmessage = function(e) {
-              console.log("Got message from worker: ", e.data);
-              outta.value = e.data;
-            };
-          },
-          function(err) {
-            console.error(err);
-          }
-        );
+        let outta = document.getElementById("output_textarea");
+        myWorker.postMessage({ file: file });
+        myWorker.onmessage = function(e) {
+          console.log("Got message from worker: ", e.data);
+          outta.value = e.data;
+        };
       }
     </script>
   </body>
