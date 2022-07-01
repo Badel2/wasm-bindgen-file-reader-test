@@ -52,12 +52,12 @@
         },
         false
       );
+      let myWorker = new Worker("worker.js");
 
       function runGui() {
         Rust.wasm_bindgen_file_reader.then(
           function(wasm_bindgen_file_reader) {
             let outta = document.getElementById("output_textarea");
-            let myWorker = new Worker("worker.js");
             myWorker.postMessage({ file: file });
             myWorker.onmessage = function(e) {
               console.log("Got message from worker: ", e.data);
