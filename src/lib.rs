@@ -188,3 +188,16 @@ pub fn sha256_file_sync(file: web_sys::File) -> String {
     // Return sha256 hash in hex and number of bytes read
     format!("{} ({} bytes)", hex::encode(result), count)
 }
+
+#[wasm_bindgen]
+pub fn fill_memory() {
+    let mut outer_vec = Vec::new();
+    loop {
+        let mut v = vec![];
+        for _ in 0..1_000_000 {
+            v.push(0u8);
+        }
+        outer_vec.push(v);
+        log::debug!("{}MB", outer_vec.len());
+    }
+}
