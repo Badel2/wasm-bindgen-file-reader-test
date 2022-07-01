@@ -13,7 +13,7 @@ hex = "0.4.3"
 js-sys = "0.3.57"
 log = { version = "0.4.14", features = ["std"] }
 sha2 = "0.10.2"
-wasm-bindgen = { version = "0.2.80", features = ["serde-serialize"] }
+wasm-bindgen = { version = "0.2.81", features = ["serde-serialize"] }
 wasm-bindgen-futures = "0.4.30"
 wasm-logger = "0.2.0"
 web-sys = { version = "0.3.57", features = ["Blob", "File", "FileReaderSync"] }
