@@ -4,6 +4,10 @@ use std::io::SeekFrom;
 use std::panic;
 use wasm_bindgen::prelude::*;
 
+thread_local! {
+    static FILE_READER_SYNC: web_sys::FileReaderSync = web_sys::FileReaderSync::new().expect("failed to create FileReaderSync. is this a web worker context?");
+}
+
 #[wasm_bindgen(start)]
 pub fn init() {
     wasm_logger::init(wasm_logger::Config::default());
@@ -55,11 +59,11 @@ impl Read for WebSysFile {
             .file
             .slice_with_f64_and_f64(offset_f64, offset_end_f64)
             .expect("failed to slice file");
-        let file_reader_sync = web_sys::FileReaderSync::new()
-            .expect("failed to create FileReaderSync. is this a web worker context?");
-        let array_buffer = file_reader_sync
-            .read_as_array_buffer(&blob)
-            .expect("failed to read as array buffer");
+        let array_buffer = FILE_READER_SYNC.with(|file_reader_sync| {
+            file_reader_sync
+                .read_as_array_buffer(&blob)
+                .expect("failed to read as array buffer")
+        });
         let array = js_sys::Uint8Array::new(&array_buffer);
 
         let actual_read_bytes = array.byte_length() as usize;
