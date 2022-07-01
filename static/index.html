@@ -44,7 +44,7 @@
 
     <script type="text/javascript" src="wasm_bindgen_file_reader.js"></script>
     <script>
-      let file = null;
+      let file = document.getElementById("filepicker").files[0] || null;
       document.getElementById("filepicker").addEventListener(
         "change",
         function() {
